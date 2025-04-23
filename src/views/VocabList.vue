@@ -1,0 +1,69 @@
+<template>
+    <div class="container py-5">
+      <h1 class="text-center text-primary mb-4">📘 Vocab Builder</h1>
+  
+      <!-- Form thêm từ -->
+      <form @submit.prevent="addWord" class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input v-model="newWord.word" type="text" class="form-control" placeholder="Vocab" required>
+        </div>
+        <div class="col-md-5">
+            <input v-model="newWord.meaning" type="text" class="form-control" placeholder="Meaning" required>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-primary">Add</button>
+        </div>
+      </form>
+  
+      <!-- Danh sách từ -->
+      <ul class="list-group">
+        <li v-for="(word, index) in words" :key="word._id" class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ word.word }}</strong> – <span class="text-muted">{{ word.meaning }}</span>
+          </div>
+          <div>
+            <button @click="editWord(index)" class="btn btn-sm btn-outline-primary me-2">Edit</button>
+            <button @click="deleteWord(word._id)" class="btn btn-sm btn-outline-danger">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  export default {
+    data() {
+      return {
+        newWord: { word: '', meaning: '' },
+        words: [],
+      };
+    },
+    methods: {
+      async fetchWords() {
+        const res = await axios.get('http://localhost:3000/api/vocab');
+        this.words = res.data;
+      },
+      async addWord() {
+console.log(this.newWord); // Kiểm tra dữ liệu trước khi gửi
+        const res = await axios.post('http://localhost:3000/api/vocab', this.newWord);
+        this.words.push(res.data);
+        this.newWord.word = ''; // Đổi từ term thành word
+        this.newWord.meaning = '';
+      },
+      async deleteWord(id) {
+        await axios.delete(`http://localhost:3000/api/vocab/${id}`);
+        this.words = this.words.filter(word => word._id !== id);
+      },
+      editWord(index) {
+        const word = this.words[index];
+        this.newWord = { ...word };
+        this.deleteWord(word._id);
+      }
+    },
+    mounted() {
+      this.fetchWords();
+    }
+  };
+  </script>
