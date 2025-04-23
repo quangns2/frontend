@@ -46,10 +46,10 @@
         this.words = res.data;
       },
       async addWord() {
-console.log(this.newWord); // Kiểm tra dữ liệu trước khi gửi
+        console.log(this.newWord); 
         const res = await axios.post('http://localhost:3000/api/vocab', this.newWord);
         this.words.push(res.data);
-        this.newWord.word = ''; // Đổi từ term thành word
+        this.newWord.word = ''; 
         this.newWord.meaning = '';
       },
       async deleteWord(id) {
