@@ -42,18 +42,19 @@
     },
     methods: {
       async fetchWords() {
-        const res = await axios.get('http://localhost:3000/api/vocab');
+        const res = await axios.get('https://express-nodejs-api.onrender.com/api/vocab');
+        // const res = await axios.get('http://localhost:3000/api/vocab');
         this.words = res.data;
       },
       async addWord() {
         console.log(this.newWord); 
-        const res = await axios.post('http://localhost:3000/api/vocab', this.newWord);
+        const res = await axios.post('https://express-nodejs-api.onrender.com/api/vocab', this.newWord);
         this.words.push(res.data);
         this.newWord.word = ''; 
         this.newWord.meaning = '';
       },
       async deleteWord(id) {
-        await axios.delete(`http://localhost:3000/api/vocab/${id}`);
+        await axios.delete(`https://express-nodejs-api.onrender.com/api/vocab/${id}`);
         this.words = this.words.filter(word => word._id !== id);
       },
       editWord(index) {
