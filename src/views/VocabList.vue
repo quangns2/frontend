@@ -1,16 +1,19 @@
 <template>
     <div class="container py-5">
       <h1 class="text-center text-primary mb-4">📘 Vocab Builder</h1>
-  
       <!-- Form thêm từ -->
       <form @submit.prevent="addWord" class="row g-2 mb-4">
-        <div class="col-md-5">
-            <input v-model="newWord.word" type="text" class="form-control" placeholder="Vocab" required>
+        <div class="col-md-4">
+            <input v-model="newWord.word" type="text" class="form-control" placeholder="English" required>
         </div>
-        <div class="col-md-5">
-            <input v-model="newWord.meaning" type="text" class="form-control" placeholder="Meaning" required>
+        <div class="col-md-4">
+            <input v-model="newWord.meaning" type="text" class="form-control" placeholder="German" required>
+        </div>
+        <div class="col-md-4">
+          <input v-model="newWord.french" type="text" class="form-control" placeholder="France">
         </div>
         <div class="col-md-2 d-grid">
+        
           <button class="btn btn-primary">Add</button>
         </div>
       </form>
@@ -19,7 +22,7 @@
       <ul class="list-group">
         <li v-for="(word, index) in words" :key="word._id" class="list-group-item d-flex justify-content-between align-items-center">
           <div>
-            <strong>{{ word.word }}</strong> – <span class="text-muted">{{ word.meaning }}</span>
+            <strong>{{ word.word }}</strong> – <span class="text-muted">{{ word.meaning }}</span> - <span class="text-muted">{{ word.french }}</span>
           </div>
           <div>
             <button @click="editWord(index)" class="btn btn-sm btn-outline-primary me-2">Edit</button>
@@ -36,7 +39,7 @@
   export default {
     data() {
       return {
-        newWord: { word: '', meaning: '' },
+        newWord: { word: '', meaning: '', french: ''},
         words: [],
       };
     },
@@ -52,6 +55,7 @@
         this.words.push(res.data);
         this.newWord.word = ''; 
         this.newWord.meaning = '';
+        this.newWord.french = '';
       },
       async deleteWord(id) {
         await axios.delete(`https://express-nodejs-api.onrender.com/api/vocab/${id}`);
